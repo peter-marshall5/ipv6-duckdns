@@ -1,0 +1,8 @@
+#!/sbin/openrc-run
+
+command="/opt/ddns.sh"
+supervisor="supervise-daemon"
+
+depend() {
+        need net
+}
