@@ -12,6 +12,12 @@ while true; do
   if [ "$ip6" != "" ]; then
     if [ ! -e "$cache" ] || [ "$ip6" != "$(cat $cache)" ]; then
       echo "$ip6" > "$cache"
+      
+      # Send unsolicited neighbor advertisement
+      # Required to let the router know our new IPv6 address
+      ndptool -t na -U -i br0 -T "$ip6" send
+
+      # Update our DuckDNS record
       query="https://www.duckdns.org/update?domains=${domain}&token=${token}&ip=&ipv6=${ip6}"
       result=$(curl -s "$query")
       if [ "$result" != OK ]; then
